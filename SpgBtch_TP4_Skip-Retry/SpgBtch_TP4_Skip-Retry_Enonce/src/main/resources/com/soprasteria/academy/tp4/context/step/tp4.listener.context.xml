@@ -1,0 +1,11 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Listener components ***************************************** -->
+	<!--********************************************************************************************** -->
+	<bean id="tp4JobListener" class="com.soprasteria.academy.tp4.listener.TP4JobListener"/>
+	
+	<bean id="tp4StepListener" class="com.soprasteria.academy.tp4.listener.step.TP4Step1Listener"/>
+</beans>

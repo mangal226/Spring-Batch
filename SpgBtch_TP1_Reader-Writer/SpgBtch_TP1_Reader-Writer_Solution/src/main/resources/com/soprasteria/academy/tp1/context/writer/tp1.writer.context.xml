@@ -1,0 +1,12 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Writer components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp1WriterID" class="com.soprasteria.academy.tp1.writer.TP1Writer">
+		<property name="dataSource" ref="dataSourceID" />
+		<property name="query" value="${bibliotheque.query.insert}" />
+	</bean>
+</beans>

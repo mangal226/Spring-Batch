@@ -1,0 +1,17 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Reader components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp1ReaderID" class="com.soprasteria.academy.tp1.reader.TP1Reader">
+		<property name="input" value="src/main/resources/input/tp1_bibliotheque.txt" />
+		<property name="mapper" ref="tp1LivreMapperID" />
+	</bean>
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Mapper components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp1LivreMapperID" class="com.soprasteria.academy.tp1.model.mapper.TP1LivreMapper" />
+</beans>

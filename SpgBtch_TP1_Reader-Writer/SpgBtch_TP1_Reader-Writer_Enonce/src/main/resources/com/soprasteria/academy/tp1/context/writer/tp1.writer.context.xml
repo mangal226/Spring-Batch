@@ -1,0 +1,15 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- A FAIRE -->
+
+<!-- 1. Creer un bean writer sur la classe TP1Writer.java -->
+<!-- 2. Injecter la source de donnée référencé par l'id "dataSourceID" -->
+<!-- 3. Injecter la requete de la propriété "bibliotheque.query.insert" -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Writer components ******************************************* -->
+	<!--********************************************************************************************** -->
+
+</beans>

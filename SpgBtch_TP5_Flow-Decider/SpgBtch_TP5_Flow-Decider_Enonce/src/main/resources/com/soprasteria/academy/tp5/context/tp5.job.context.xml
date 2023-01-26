@@ -1,0 +1,60 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- A FAIRE -->
+
+	<!-- 1. Declarer que l'element qui succede le step 1 est un decider -->
+	<!-- 2. Declarer le decider utilise votre implementation du decider -->
+	<!-- 2.1. indiquer que le batch s'arrete en erreur si le statut est ERREUR_BATCH 
+		(le code de sortie devra etre CUSTOM_FAILED_CODE) -->
+	<!-- 2.2. indiquer que le batch s'arrete normalement si le statut est ARRET_BATCH 
+		(le code de sortie devra etre NO_PARAMS_STOP_CODE) -->
+	<!-- 2.3. indiquer que le batch continu dans tout les autres cas vers le 
+		flow 1 (flow de gauche), puis vers le flow 2 (flow de droite)-->
+
+	<!-- 3. Declarer les deux flow d'execution -->
+	<!-- 3.1. le flow 1 contient 2 tasklet successive -->
+	<!-- 3.1.1. le premier tasklet(1) du flow refere l'implementation qui genere 
+		le rapport txt -->
+	<!-- 3.1.2. le deuxieme tasklet(2) du flow refere l'implementation qui boucle 
+		sur 1000iterations -->
+
+	<!-- 3.2. le flow 2 contient 1 tasklet -->
+	<!-- 3.2.1. l'unique tasklet(3) du flow refere la même implementation qui boucle 
+		sur 1000iterations -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp5.datasource.context.xml" />
+	<import resource="step/tp5.reader.context.xml" />
+	<import resource="step/tp5.process.context.xml" />
+	<import resource="step/tp5.writer.context.xml" />
+	<import resource="step/tp5.tasklet.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp5JobID">
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp5Step1ID" parent="tp5StepParent1ID" />
+	</batch:job>
+
+	<batch:step id="tp5StepParent1ID">
+		<batch:description>etape de migration du fichier en base de donnée</batch:description>
+		<batch:tasklet>
+			<batch:chunk reader="tp5ReaderID" processor="tp5ProcessorID"
+				writer="tp5WriterID" commit-interval="${tp5JobID.tp5StepID.commit-interval:10}">
+			</batch:chunk>
+		</batch:tasklet>
+	</batch:step>
+
+	<bean id="tp5LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+</beans>

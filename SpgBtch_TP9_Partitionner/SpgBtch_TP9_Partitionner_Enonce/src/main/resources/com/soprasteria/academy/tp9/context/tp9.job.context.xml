@@ -1,0 +1,46 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- 	A FAIRE -->
+
+    <!-- 1. Declarer dans le job un step tp9MasterStep  -->
+	<!--  1.1. ce step master contient un bean partition qui reference le step slave et le partitioner -->
+	<!--  1.2. déclarer le grid-size de cette partition ainsi que le task executor -->
+
+    <!-- 2. Declarer le bean du partitioner  -->
+	<!--  2.1. On utilisera la classe fourni par le framework pour lire plusieurs fichiers (multi resource partitioner) -->
+	<!--  2.2. Ce bean prend en parametre le path vers les resources qu'on peut variabiliser avec * -->
+
+	<!-- 3. Declarer le bean du step slave -->
+	<!--  3.1. Le tasklet du ce step contient un chunk avec le reader tp9VariableReaderID et le writer tp9WriterID -->
+	<!--  3.2. Indiquer que le commit-interval est de 1000 -->
+	<!--  3.3. Ajouter le chunk listener dans ce chunk -->
+
+	<!-- 4. Vous pouvez faire varier l'implementation du task executor, le grid size et/ou le commit-interval pour voir les different impacts. -->
+	
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp9.datasource.context.xml" />
+	<import resource="reader/tp9.reader.context.xml" />
+	<import resource="writer/tp9.writer.context.xml" />
+	<import resource="listener/tp9.listener.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp9JobID">
+	</batch:job>
+
+	<bean id="tp9TaskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
+
+	<bean id="tp9LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+
+</beans>

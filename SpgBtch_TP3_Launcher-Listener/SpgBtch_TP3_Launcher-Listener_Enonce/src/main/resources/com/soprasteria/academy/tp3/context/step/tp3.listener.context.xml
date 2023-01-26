@@ -1,0 +1,14 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- A FAIRE -->
+
+<!-- 1. declarer le bean du listener qui reference votre classe java job listener -->
+<!-- 2. declarer le bean du listener qui reference votre classe java step listener -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Listener components ***************************************** -->
+	<!--********************************************************************************************** -->
+
+</beans>

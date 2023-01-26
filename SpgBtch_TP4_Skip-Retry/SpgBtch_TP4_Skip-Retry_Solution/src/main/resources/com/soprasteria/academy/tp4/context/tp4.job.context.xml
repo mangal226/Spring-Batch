@@ -1,0 +1,102 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp4.datasource.context.xml" />
+	<import resource="step/tp4.reader.context.xml" />
+	<import resource="step/tp4.process.context.xml" />
+	<import resource="step/tp4.writer.context.xml" />
+	<import resource="step/tp4.listener.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp4JobID">
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp4aStepID">
+        <batch:description>etape de migration du fichier en base de donnée</batch:description>
+			<batch:tasklet>
+				<batch:chunk
+					 commit-interval="${tp4JobID.tp4StepID.commit-interval:10}"
+					skip-limit="${tp4JobID.tp4StepID.skip-limit:17500}">
+					<batch:reader>
+						<bean class="com.soprasteria.academy.tp4.reader.TP4Reader">
+							<property name="delegate" ref="tp4ReaderID" />
+							<property name="filterInReader" value="${tp4JobID.tp4StepID.filterInReader:false}" />
+						</bean>
+					</batch:reader>
+					<batch:streams>
+						<batch:stream ref="tp4ReaderID"/>
+					</batch:streams>
+					<batch:processor>
+						<bean class="com.soprasteria.academy.tp4.processor.TP4Processor">
+							<property name="filterInProcessor" value="${tp4JobID.tp4StepID.filterInProcessor:true}" />
+						</bean>
+					</batch:processor>
+					<batch:writer>
+						<bean class="com.soprasteria.academy.tp4.writer.TP4Writer">
+							<property name="delegate" ref="tp4WriterID" />
+						</bean>
+					</batch:writer>
+					<batch:skippable-exception-classes>
+						<batch:include
+							class="com.soprasteria.academy.tp4.exception.TP4FiltreException" />
+					</batch:skippable-exception-classes>
+
+					<!-- Exemple de config avec Retry -->
+<!-- 					<batch:retryable-exception-classes> -->
+<!-- 						<batch:include -->
+<!-- 							class="com.soprasteria.academy.tp4.exception.TP4FiltreException" /> -->
+<!-- 					</batch:retryable-exception-classes> -->
+<!-- 					<batch:retry-listeners> -->
+<!-- 						<batch:listener> -->
+<!-- 							<bean class="com.soprasteria.academy.tp4.listener.step.TP4RetryListener"/> -->
+<!-- 						</batch:listener> -->
+<!-- 					</batch:retry-listeners> -->
+
+					<batch:listeners>
+						<batch:listener ref="tp4StepListener" />
+						<batch:listener>
+							<bean class="com.soprasteria.academy.tp4.listener.step.TP4SkipListener"/>
+						</batch:listener>
+					</batch:listeners>
+				</batch:chunk>
+			</batch:tasklet>
+			<batch:listeners>
+				<batch:listener ref="tp4StepListener" />
+			</batch:listeners>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="tp4JobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<!-- 
+	<batch:job id="JobID">
+		<batch:step id="StepID">
+			<batch:tasklet>
+				<batch:chunk reader="tp4ReaderID" processor="tp4ProcessorID"
+					writer="tp4WriterID" commit-interval="10"
+					skip-policy="SkipPolicyID">
+				</batch:chunk>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+	 -->
+
+	<bean id="SkipPolicyID" class="com.soprasteria.academy.tp4.skip.TP4SkipPolicy">
+		<property name="skipLimit" value="${tp4JobID.tp4StepID.skip-limit:10000}" />
+	</bean>
+
+	<bean id="tp4LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+</beans>

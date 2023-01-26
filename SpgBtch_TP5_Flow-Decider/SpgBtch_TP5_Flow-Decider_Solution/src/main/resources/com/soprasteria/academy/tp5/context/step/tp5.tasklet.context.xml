@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Reader components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp5Tasklet1ID" class="com.soprasteria.academy.tp5.tasklet.TP5TaskletSplit1">
+		<property name="db" ref="dataSourceID" />
+		<property name="sql" value="${bibliotheque.query.count}" />
+		<property name="outputFileName" value="tp5_rapport.txt" />
+	</bean>
+
+	<bean id="tp5Tasklet2ID" class="com.soprasteria.academy.tp5.tasklet.TP5TaskletSplit2">
+		<property name="msg" value="FLOW 1! iteration n°{0}" />
+	</bean>
+
+	<bean id="tp5Tasklet3ID" class="com.soprasteria.academy.tp5.tasklet.TP5TaskletSplit2">
+		<property name="msg" value="FLOW 2! iteration n°{0}" />
+	</bean>
+
+</beans>

@@ -1,0 +1,9 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Processor components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp5ProcessorID" class="com.soprasteria.academy.tp5.processor.TP5Processor"/>
+</beans>

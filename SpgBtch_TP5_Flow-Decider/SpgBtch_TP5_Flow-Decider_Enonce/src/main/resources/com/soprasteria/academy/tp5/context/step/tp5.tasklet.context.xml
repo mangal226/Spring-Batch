@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- A FAIRE -->
+
+	<!-- 1. declarer le tasklet 1 -->
+	<!--  1.1. injecter la source de donnée -->
+	<!--  1.2. injecter la requete de lecture du nombre d'element en base (bibliotheque.query.count) -->
+	<!--  1.3. injecter le nom du rapport à générer (tp5_rapport.txt) -->
+
+	<!-- 2. déclarer le tacklet 2 -->
+	<!--  2.1. injecter un nom d'identification de ce tasklet -->
+
+	<!-- 3. déclarer le tacklet 3 sur la même implementation que le tasklet2 -->
+	<!--  3.1. injecter un nom d'identification different pour ce tasklet -->
+	<!--********************************************************************************************** -->
+	<!--******************************** Tasklet components ******************************************* -->
+	<!--********************************************************************************************** -->
+
+
+</beans>

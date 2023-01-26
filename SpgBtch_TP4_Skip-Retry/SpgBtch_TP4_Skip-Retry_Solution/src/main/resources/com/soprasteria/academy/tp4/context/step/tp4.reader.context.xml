@@ -1,0 +1,36 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Reader components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp4ReaderID" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="resource"
+			value="file:src/main/resources/input/tp4_bibliotheque.csv" />
+		<property name="encoding" value="UTF-8" />
+		<property name="linesToSkip" value="1" />
+		<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<bean
+						class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value=";" />
+						<property name="names"
+							value="title,author,publicationyear,isbn,europrice,stock" />
+					</bean>
+				</property>
+				<property name="fieldSetMapper" ref="tp4LivreMapperID"/>
+			</bean>
+		</property>
+	</bean>
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Mapper components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp4LivreMapperID"
+		class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+		<property name="targetType" value="com.soprasteria.academy.tp4.model.TP4Livre" />
+	</bean>
+</beans>

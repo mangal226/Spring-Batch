@@ -1,0 +1,36 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp2.datasource.context.xml" />
+	<import resource="reader/tp2.reader.context.xml" />
+	<import resource="processor/tp2.process.context.xml" />
+	<import resource="writer/tp2.writer.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp2JobID">
+
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp2StepID">
+        <batch:description>etape de migration du fichier en base de donnée</batch:description>
+			<batch:tasklet>
+				<batch:chunk reader="tp2ReaderID" processor="tp2ProcessorID" writer="tp2WriterID"
+					commit-interval="${tp2JobID.tp2StepID.commit-interval:10}" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+
+	<bean id="tp2LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+</beans>

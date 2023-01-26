@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- A FAIRE -->
+
+<!-- 1. Creer un bean mapper sur la classe TP1LivreMapper -->
+<!-- 2. Creer un bean reader sur la classe TP1Reader.java -->
+<!-- 3. Injecter le chemin d'accés à la ressource "tp1_bibliotheque.txt" -->
+<!-- 4. Injecter le mapper dans le bean du reader -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Reader components ******************************************* -->
+	<!--********************************************************************************************** -->
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Mapper components ******************************************* -->
+	<!--********************************************************************************************** -->
+
+</beans>

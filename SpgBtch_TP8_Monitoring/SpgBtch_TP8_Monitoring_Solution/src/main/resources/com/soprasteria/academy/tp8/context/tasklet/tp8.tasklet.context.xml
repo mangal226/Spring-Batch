@@ -1,0 +1,19 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Tasklet component ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp8Tasklet1ID" class="com.soprasteria.academy.tp8.tasklet.TP8Tasklet">
+		<property name="msg" value="FLOW 1! iteration n°{0}" />
+	</bean>
+	
+	<bean id="tp8Tasklet2ID" class="com.soprasteria.academy.tp8.tasklet.TP8Tasklet">
+		<property name="msg" value="FLOW 2! iteration n°{0}" />
+	</bean>
+	
+</beans>

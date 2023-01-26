@@ -1,0 +1,30 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Processor components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp2ProcessorID" class="com.soprasteria.academy.tp2.processor.TP2Processor"/>
+
+
+	<!-- ++++++++++++++++++++++++++++++ -->
+	<!-- CompositeItemProcessor Example -->
+	<!-- ++++++++++++++++++++++++++++++ -->
+	<bean id="tp2CompositeProcessorID" class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="delegates">
+			<list>
+				<bean class="org.springframework.batch.item.validator.ValidatingItemProcessor">
+					<property name="filter" value="true"/>
+					<property name="validator">
+						<bean class="com.soprasteria.academy.tp2.processor.PublicationYearValidator"/>
+					</property>
+				</bean>
+				<ref bean="tp2ProcessorWithoutFilterID"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="tp2ProcessorWithoutFilterID" class="com.soprasteria.academy.tp2.processor.TP2ProcessorWithoutFilter"/>
+
+</beans>

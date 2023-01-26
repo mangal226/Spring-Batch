@@ -1,0 +1,44 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Configuration externe *************************************** -->
+	<!--********************************************************************************************** -->
+	<context:property-placeholder
+		location="classpath:com/soprasteria/academy/tp9/bdd/tp9.sql.properties"
+		ignore-resource-not-found="false" ignore-unresolvable="false" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** transaction manager components ****************************** -->
+	<!--********************************************************************************************** -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceID" />
+	</bean>
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Framework components **************************************** -->
+	<!--********************************************************************************************** -->
+	<bean id="jobRepository"
+		class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+	</bean>
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Source de données components ******************************** -->
+	<!--********************************************************************************************** -->
+	<!-- Base de données embarquée de type h2 - url=jdbc:hsql:mem:dataSourceID -->
+	<bean id="dataSourceID" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:file:./dataSource;MODE=Oracle" />
+		<property name="username" value="" />
+		<property name="password" value="" />
+	</bean>
+
+	<jdbc:initialize-database data-source="dataSourceID">
+		<jdbc:script location="classpath:com/soprasteria/academy/tp9/bdd/tp9.create-db.sql" />
+	</jdbc:initialize-database>
+</beans>

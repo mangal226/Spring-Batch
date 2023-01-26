@@ -1,0 +1,57 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp9.datasource.context.xml" />
+	<import resource="reader/tp9.reader.context.xml" />
+	<import resource="writer/tp9.writer.context.xml" />
+	<import resource="listener/tp9.listener.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp9JobID">
+
+		<batch:step id="tp9MasterStep">
+			<partition step="tp9SlaveStep" partitioner="tp9Partitioner">
+				<handler grid-size="1" task-executor="tp9TaskExecutor" />
+			</partition>
+		</batch:step>
+	</batch:job>
+
+	<bean id="tp9Partitioner"
+		class="org.springframework.batch.core.partition.support.MultiResourcePartitioner">
+		<property name="resources" value="classpath:input/tp9_bibliotheque_*.csv" />
+	</bean>
+
+	<step id="tp9SlaveStep" xmlns="http://www.springframework.org/schema/batch">
+		<tasklet transaction-manager="transactionManager">
+			<chunk reader="tp9VariableReaderID" writer="tp9WriterID"
+				commit-interval="20000" />
+			<listeners>
+				<listener ref="tp9StepListener" />
+			</listeners>
+		</tasklet>
+	</step>
+
+	<!-- <bean id="tp9TaskExecutor" -->
+	<!-- class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
+	<!-- <property name="corePoolSize" value="16" /> -->
+	<!-- <property name="maxPoolSize" value="16" /> -->
+	<!-- </bean> -->
+
+	<bean id="tp9TaskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
+
+	<bean id="tp9LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+
+</beans>

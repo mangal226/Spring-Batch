@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- A FAIRE -->
+
+<!-- 1. Creer un bean mapper sur la classe BeanWrapperFieldSetMapper -->
+<!-- 2. Declarer le model TP2Livre pour le mapper -->
+<!-- 2. Creer un bean reader sur la classe FlatFileItemReader -->
+<!-- 3. Injecter le fichier comme resource -->
+<!-- 4. Injecter l'encodage en UTF-8 -->
+<!-- 5. Injecter le nombre de ligne à ignorer -->
+<!-- 6. Injecter le mapper -->
+<!-- 7. Creer et injecter le tokenizer sur la classe DelimitedLineTokenizer -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Reader components ******************************************* -->
+	<!--********************************************************************************************** -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Mapper components ******************************************* -->
+	<!--********************************************************************************************** -->
+
+</beans>

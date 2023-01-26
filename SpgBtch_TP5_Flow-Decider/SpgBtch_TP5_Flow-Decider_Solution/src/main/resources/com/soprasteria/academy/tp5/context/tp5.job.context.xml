@@ -1,0 +1,73 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp5.datasource.context.xml" />
+	<import resource="step/tp5.reader.context.xml" />
+	<import resource="step/tp5.process.context.xml" />
+	<import resource="step/tp5.writer.context.xml" />
+	<import resource="step/tp5.tasklet.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp5JobID">
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp5Step1ID" parent="tp5StepParent1ID" next="tp5DecisionID" />
+
+		<!-- ETAPE 1bis: decider! -->
+		<batch:decision id="tp5DecisionID" decider="tp5DeciderID">
+			<batch:fail on="ERREUR_BATCH" exit-code="CUSTOM_FAILED_CODE" />
+			<batch:end on="ARRET_BATCH" exit-code="NO_PARAMS_STOP_CODE" />
+			<batch:next on="*" to="flowGauche" />
+		</batch:decision>
+
+		<!-- ETAPE 2: 2 FLOW -->
+		<batch:flow parent="flow1ID" id="flowGauche" next="flowDroit" />
+		<batch:flow parent="flow2ID" id="flowDroit" />
+	</batch:job>
+
+	<batch:step id="tp5StepParent1ID">
+		<batch:description>etape de migration du fichier en base de donnée</batch:description>
+		<batch:tasklet>
+			<batch:chunk reader="tp5ReaderID" processor="tp5ProcessorID"
+				writer="tp5WriterID" commit-interval="${tp5JobID.tp5StepID.commit-interval:10}">
+			</batch:chunk>
+		</batch:tasklet>
+	</batch:step>
+
+	<bean id="tp5DeciderID" class="com.soprasteria.academy.tp5.decider.TP5Decider" />
+
+	<batch:flow id="flow1ID">
+		<batch:step id="tp5Step2Split1ID" next="tp5Step2Split2ID">
+			<batch:description>rapport du nb elements en base</batch:description>
+			<batch:tasklet ref="tp5Tasklet1ID" />
+		</batch:step>
+		<batch:step id="tp5Step2Split2ID">
+			<batch:description>affichage iteratif du flow 1</batch:description>
+			<batch:tasklet ref="tp5Tasklet2ID" />
+		</batch:step>
+	</batch:flow>
+
+	<batch:flow id="flow2ID">
+		<batch:step id="tp5Step3Split2ID">
+			<batch:description>affichage iteratif du flow 2</batch:description>
+			<batch:tasklet ref="tp5Tasklet3ID" />
+		</batch:step>
+	</batch:flow>
+
+	<bean id="tp5LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+
+	<!-- permet d'avoir les flow en parrallele: cf-jour3 -->
+	<bean id="TP5TaskExecutorID" class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
+</beans>

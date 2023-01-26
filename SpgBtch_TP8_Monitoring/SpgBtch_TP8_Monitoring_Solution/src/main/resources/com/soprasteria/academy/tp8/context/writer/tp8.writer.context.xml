@@ -1,0 +1,19 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Writer components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp8WriterID" class="org.springframework.batch.item.database.JdbcBatchItemWriter">
+        <property name="dataSource" ref="dataSourceID" />
+        <property name="sql" value="${bibliotheque.query.insert}" />
+        <property name="itemSqlParameterSourceProvider" ref="tp8ProviderID" />
+    </bean>
+    
+	<!--********************************************************************************************** -->
+	<!--******************************** Provider components ***************************************** -->
+	<!--********************************************************************************************** -->	
+    <bean id="tp8ProviderID" 
+    	class="org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider" />
+</beans>

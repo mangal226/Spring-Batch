@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "tp1x.task-name",
+      "defaultValue": "<No Name>"
+    }
+  ]
+}

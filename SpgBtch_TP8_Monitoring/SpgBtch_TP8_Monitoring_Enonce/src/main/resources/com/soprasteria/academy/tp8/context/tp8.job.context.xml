@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp8.datasource.context.xml" />
+	<import resource="reader/tp8.reader.context.xml" />
+	<import resource="writer/tp8.writer.context.xml" />
+	<import resource="tasklet/tp8.tasklet.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp8JobID">
+
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp8StepBddID" next="tp8Step1ID">
+			<batch:tasklet>
+				<batch:chunk reader="tp8ReaderID" writer="tp8WriterID"
+					commit-interval="${tp8JobID.tp8StepID.commit-interval:10}" />
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="tp8Step1ID" next="tp8Step2ID">
+			<batch:tasklet ref="tp8Tasklet1ID" />
+		</batch:step>
+		<batch:step id="tp8Step2ID">
+			<batch:tasklet ref="tp8Tasklet2ID" />
+		</batch:step>
+	</batch:job>
+
+	<bean id="tp8LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+	
+</beans>

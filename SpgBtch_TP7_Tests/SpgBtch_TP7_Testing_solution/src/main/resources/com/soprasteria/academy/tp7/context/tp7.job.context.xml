@@ -1,0 +1,46 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp7.datasource.context.xml" />
+	<import resource="step/tp7.reader.context.xml" />
+	<import resource="step/tp7.process.context.xml" />
+	<import resource="step/tp7.writer.context.xml" />
+	<import resource="step/tp7.tasklet.context.xml" />
+	<import resource="step/tp7.listener.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp7JobID">
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp7Step1ID" next="tp7Step2ID">
+			<batch:description>etape de migration du fichier en base de donnée</batch:description>
+			<batch:tasklet>
+				<batch:chunk reader="tp7ReaderID" processor="tp7ProcessorID"
+					writer="tp7WriterID" commit-interval="${tp7JobID.tp7StepID.commit-interval:10}">
+				</batch:chunk>
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="tp7Step2ID">
+			<batch:description>rapport du nb elements en base</batch:description>
+			<batch:tasklet ref="tp7TaskletID" />
+			<batch:end on="*" exit-code="CECI_EST_UN_CODE_VOLONTAIREMENT_MODIFIE" />
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="tp7JobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<bean id="tp7LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+</beans>

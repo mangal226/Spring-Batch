@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.soprasteria.academy</groupId>
+	<artifactId>TPX1_4_springclouddataflow</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>TPX1_4_springclouddataflow</name>
+	<description>Spring Cloud Data Flow</description>
+
+	<properties>
+		<!-- MAVEN -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<!-- ENCODAGE -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- VERSION -->
+		<java.version>1.8</java.version>
+		<spring-cloud-data-flow.version>1.7.3.RELEASE</spring-cloud-data-flow.version>
+		<spring-cloud-composedtaskrunner.version>2.0.2.RELEASE</spring-cloud-composedtaskrunner.version>
+		<h2.version>1.4.197</h2.version>
+	</properties>
+
+	<!-- DEPENDANCES -->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-dataflow-server-local</artifactId>
+			<version>${spring-cloud-data-flow.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+		</dependency>
+
+	</dependencies>
+	
+	<profiles>
+		<profile>
+			 <id>scdf_tools</id>
+			 <dependencies>
+				<!-- Just for download JAR (and use-it in .BAT) -->
+				<dependency>
+					<groupId>org.springframework.cloud</groupId>
+					<artifactId>spring-cloud-dataflow-shell</artifactId>
+					<version>${spring-cloud-data-flow.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>*</groupId>
+							<artifactId>*</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+						
+				<!-- Just for download JAR (and use-it to register as task app in Spring Cloud Data Flow) -->
+				<dependency>
+					<groupId>org.springframework.cloud.task.app</groupId>
+					<artifactId>composedtaskrunner-task</artifactId>
+					<version>${spring-cloud-composedtaskrunner.version}</version>
+					<scope>runtime</scope>
+					<optional>true</optional>
+					<exclusions>
+						<exclusion>
+							<groupId>*</groupId>
+							<artifactId>*</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			 </dependencies>
+		</profile>
+	</profiles>
+
+</project>

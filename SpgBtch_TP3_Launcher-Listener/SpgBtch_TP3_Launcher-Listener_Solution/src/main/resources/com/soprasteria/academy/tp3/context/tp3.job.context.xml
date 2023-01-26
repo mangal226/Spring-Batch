@@ -1,0 +1,47 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Modular contexte ******************************************** -->
+	<!--********************************************************************************************** -->
+	<import resource="datasource/tp3.datasource.context.xml" />
+	<import resource="step/tp3.reader.context.xml" />
+	<import resource="step/tp3.process.context.xml" />
+	<import resource="step/tp3.writer.context.xml" />
+	<import resource="step/tp3.listener.context.xml" />
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Job component *********************************************** -->
+	<!--********************************************************************************************** -->
+	<batch:job id="tp3JobID">
+
+		<!-- ETAPE 1: insertion du fichier en base -->
+		<batch:step id="tp3StepID">
+        <batch:description>etape de migration du fichier en base de donnée</batch:description>
+			<batch:tasklet>
+				<batch:chunk reader="tp3ReaderID" processor="tp3ProcessorID"
+					writer="tp3WriterID" commit-interval="${tp3JobID.tp3StepID.commit-interval:10}" >
+					<batch:listeners>
+						<batch:listener ref="tp3StepListener" />
+					</batch:listeners>
+				</batch:chunk>
+			</batch:tasklet>
+			<batch:listeners>
+				<batch:listener ref="tp3StepListener" />
+			</batch:listeners>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="tp3JobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<bean id="tp3LauncherID"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+</beans>

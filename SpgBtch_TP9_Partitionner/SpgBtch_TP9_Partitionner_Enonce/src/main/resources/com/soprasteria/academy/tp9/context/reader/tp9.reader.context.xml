@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!-- A FAIRE -->
+
+<!-- 1. Ce reader est un slave qui doit lire les données spécifiques fournies par le partitioner -->
+<!-- 1.1. Indiquer que la resource doit provenir de l'attribut fileName contenu dans le step execution context  -->
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Reader components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp9VariableReaderID" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="encoding" value="UTF-8" />
+		<property name="linesToSkip" value="1" />
+		<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<bean
+						class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value=";" />
+						<property name="names"
+							value="title,author,publicationyear,isbn,europrice,stock" />
+					</bean>
+				</property>
+				<property name="fieldSetMapper" ref="tp9LivreMapperID" />
+			</bean>
+		</property>
+	</bean>
+
+	<!--********************************************************************************************** -->
+	<!--******************************** Mapper components ******************************************* -->
+	<!--********************************************************************************************** -->
+	<bean id="tp9LivreMapperID"
+		class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+		<property name="targetType" value="com.soprasteria.academy.tp9.model.TP9Livre" />
+	</bean>
+</beans>
