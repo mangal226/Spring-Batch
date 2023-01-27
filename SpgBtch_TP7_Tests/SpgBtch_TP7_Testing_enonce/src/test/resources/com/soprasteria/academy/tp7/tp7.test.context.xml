@@ -8,6 +8,7 @@
 <!-- A FAIRE -->
 
 <!-- 1. declarer un nouveau bean sur la classe Job Launcher Test Utils -->
+	<bean class="org.springframework.batch.test.JobLauncherTestUtils"/>
 
 
 </beans>
