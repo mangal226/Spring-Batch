@@ -1,0 +1,17 @@
+# Eclipse / STS
+.classpath
+.factorypath
+.project
+.springBeans
+.apt_generated/
+.settings/
+
+# maven
+target/
+
+# TP
+*.log
+dataSource.mv.db
+dataSource.trace.db
+tp5_rapport.txt
+tp7_rapport.txt

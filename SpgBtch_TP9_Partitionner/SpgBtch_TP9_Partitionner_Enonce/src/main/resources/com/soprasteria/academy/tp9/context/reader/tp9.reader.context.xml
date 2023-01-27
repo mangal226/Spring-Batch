@@ -13,6 +13,7 @@
 	<!--********************************************************************************************** -->
 	<bean id="tp9VariableReaderID" class="org.springframework.batch.item.file.FlatFileItemReader"
 		scope="step">
+		<property name="resource" value="#{stepExecutionContext[filename]"/>
 		<property name="encoding" value="UTF-8" />
 		<property name="linesToSkip" value="1" />
 		<property name="lineMapper">

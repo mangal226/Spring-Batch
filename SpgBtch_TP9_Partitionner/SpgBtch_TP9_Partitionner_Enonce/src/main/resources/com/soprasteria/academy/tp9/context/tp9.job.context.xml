@@ -34,7 +34,25 @@
 	<!--******************************** Job component *********************************************** -->
 	<!--********************************************************************************************** -->
 	<batch:job id="tp9JobID">
+		<batch:step id="tp9MasterStep">
+			<batch:partition step="tp9SlaveStep" partitioner="tp9Partitioner">
+				<batch:handler grid-size="1" task-executor="tp9TaskExecutor"/>
+			</batch:partition>
+		</batch:step>
 	</batch:job>
+
+	<bean id="idPartioner" class="org.springframework.batch.core.partition.support.MultiResourcePartitioner">
+		<property name="ressoruces" value="classpath:input/tp9_bibliotheque_*.csv"/>
+	</bean>
+
+	<batch:step id="tp9SlaveStep" xmlns="http://www.springframework.org/schema/batch">
+		<tasklet transaction-manager="transactionManager">
+			<chunk reader="tp9VariableReaderID" writer="tp9WriterID" commit-interval="20000"/>
+			<listeners>
+				<listener ref="tp9StepListener"/>
+			</listeners>
+		</tasklet>
+	</batch:step>
 
 	<bean id="tp9TaskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
 
